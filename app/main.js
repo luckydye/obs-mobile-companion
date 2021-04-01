@@ -35,8 +35,10 @@ function createWindow() {
         titleBarStyle: "default",
         center: false,
         webPreferences: {
+            preload: path.join(app.getAppPath(), '../public/udp-client.js'),
             devTools: true,
             nodeIntegration: true,
+            nodeIntegrationInWorker: true,
             webSecurity: false
         }
     })

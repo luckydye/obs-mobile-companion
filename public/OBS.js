@@ -64,12 +64,13 @@ function connectionOpende() {
             lokalStatus.stream = data;
             OBS.emit('status');
         })
-        obs.on('StreamStatus', data => {
-            lokalStatus.streamStatus = data;
-            OBS.emit('status');
-        })
     }
 
+    obs.on('StreamStatus', data => {
+        lokalStatus.streamStatus = data;
+        OBS.emit('status');
+    })
+    
     statusInterval = setInterval(reqUpdate, tickrate);
     reqUpdate();
 }

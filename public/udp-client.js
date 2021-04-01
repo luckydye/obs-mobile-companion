@@ -4,7 +4,8 @@ let client = dgram.createSocket("udp4");
 const PORT = 3001;
 
 client.on("listening", () => {
-    client.setBroadcast(true); 
+    client.setBroadcast(true);
+    console.log('UDP Client listening.');
 });
 
 client.bind(PORT);
