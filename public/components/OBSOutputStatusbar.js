@@ -59,6 +59,9 @@ class OBSOutputStatusbar extends LitElement {
                 [singal="2"] {
                     color: red;
                 }
+                .spacer {
+                    margin: 0 4px;
+                }
             `;
         }
     
@@ -85,9 +88,9 @@ class OBSOutputStatusbar extends LitElement {
                 const output = this.state.output;
                 const video = this.state.video;
 
-                video.videoFormat
-                video.colorSpace
-                video.colorRange
+                const format = video.videoFormat.split("_")[2];
+                const colorSpace = video.colorSpace.split("_")[2];
+                const colorRange = video.colorRange;
 
                 let resIcon = html`<span class="material-icons">hd</span>`;
                 if(output['height'] >= 1080) {
@@ -106,11 +109,6 @@ class OBSOutputStatusbar extends LitElement {
                     }
                 }
 
-                const COLOR = {
-                    'VIDEO_RANGE_PARTIAL': 'Partial',
-                    'VIDEO_CS_709': 'Partial',
-                }
-
                 return html`
                     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -126,6 +124,13 @@ class OBSOutputStatusbar extends LitElement {
                             ${resIcon}
                             <span>${video['outputHeight']}p</span>
                             <span>${stats['fps'].toFixed(2).padStart(2, '0')}</span>
+                        </div>
+                        <div class="cell">
+                            <span class="label">Color</span>
+                            <span class="spacer"></span>
+                            <span>${format}</span>
+                            <span class="spacer"></span>
+                            <span>${colorSpace}</span>
                         </div>
                         <div class="cell">
                             <span class="label">PC</span>
