@@ -17,5 +17,6 @@ function init() {
         const stream = preview.getStream();
         console.log(stream);
         meter.setSourceStream(stream);
+        meter.setLabel(`Master Out (${stream.getAudioTracks()[0].label})`);
     })
 }

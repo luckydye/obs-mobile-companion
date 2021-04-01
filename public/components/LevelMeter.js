@@ -80,6 +80,11 @@ export default class AudioStreamMeter extends LitElement {
         this.setSourceStream(stream);
     }
 
+    setLabel(str) {
+        this.name = str;
+        this.update();
+    }
+
     evaluate() {
         this.analyser.getFloatFrequencyData(this.dataArray);
 

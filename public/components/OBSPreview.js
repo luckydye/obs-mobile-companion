@@ -1,22 +1,50 @@
 import { css, html, LitElement } from 'https://cdn.pika.dev/lit-element';
 
-async function getMedia(constraints = { 
-    video: {
-        width: 1920,
-        height: 1080
-    },
-    audio: true,
- }) {
+let devices = [];
+
+async function getMedia() {
     let stream = null;
 
+    devices = await getMediaDevies();
+    const videoDevice = findDeviceByLabel('OBS');
+    const videoDeviceId = videoDevice.deviceId;
+
+    const audioDevice = findDeviceByLabel('CABLE');
+    const audioDeviceId = audioDevice.deviceId;
+
     try {
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        stream = await navigator.mediaDevices.getUserMedia({ 
+            video: {
+                deviceId: videoDeviceId,
+                width: 1920,
+                height: 1080
+            },
+            audio: {
+                deviceId: audioDeviceId,
+            },
+         });
         /* use the stream */
     } catch (err) {
         /* handle the error */
     }
 
     return stream;
+}
+
+async function getMediaDevies() {
+    const devices = [];
+    return navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
+        return navigator.mediaDevices.enumerateDevices().then(d => {
+            for(let device of d) {
+                devices.push(device);
+            }
+            return devices;
+        }).catch(console.error);
+    }).catch(console.error);    
+}
+
+function findDeviceByLabel(label) {
+    return devices.find(dev => dev.label.match(label));
 }
 
 let ticksPerSeconds;
