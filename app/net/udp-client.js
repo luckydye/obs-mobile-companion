@@ -17,9 +17,11 @@ client.on("message", (message, rinfo) => {
         const json = JSON.parse(message);
         console.log(`Message: ${JSON.stringify(json)}`);
 
-        if(json.type == "pong") {
-            const roundtrap = Date.now() - (+json.timestamp);
-            console.log(`Latency: ${roundtrap / 2}ms`);
+        switch(json.type) {
+            case "pong":
+                const roundtrap = Date.now() - (+json.timestamp);
+                console.log(`Latency: ${roundtrap / 2}ms`);
+                break;
         }
 
         if(!foundServer) {
