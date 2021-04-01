@@ -1,16 +1,22 @@
-var SRC_PORT = 6025;
-var PORT = 4003;
-var MULTICAST_ADDR = '224.0.0.255';
+var news = [
+    "Borussia Dortmund wins German championship",
+    "Tornado warning for the Bay Area",
+    "More rain for the weekend",
+    "Android tablets take over the world",
+    "iPad2 sold out",
+    "Nation's rappers down to last two samples"
+];
+
 var dgram = require('dgram');
 var server = dgram.createSocket("udp4");
-
-server.bind(SRC_PORT, function () {         // Add the HOST_IP_ADDRESS for reliability
-    setInterval(multicastNew, 4000);
+server.bind(function () {
+    server.setBroadcast(true)
+    server.setMulticastTTL(128);
+    setInterval(broadcastNew, 3000);
 });
 
-function multicastNew() {
-    var message = Buffer.from("Multicast message!");
-    server.send(message, 0, message.length, PORT, MULTICAST_ADDR, function () {
-        console.log("Sent '" + message + "'");
-    });
+function broadcastNew() {
+    var message = new Buffer(news[Math.floor(Math.random() * news.length)]);
+    server.send(message, 0, message.length, 5007, "224.1.1.1");
+    console.log("Sent " + message + " to the wire...");
 }
