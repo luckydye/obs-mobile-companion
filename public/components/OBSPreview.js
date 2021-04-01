@@ -4,7 +4,8 @@ async function getMedia(constraints = {
     video: {
         width: 1920,
         height: 1080
-    }
+    },
+    audio: true,
  }) {
     let stream = null;
 
@@ -57,13 +58,20 @@ class OBSPreview extends LitElement {
         loop();
 
         getMedia().then(mediaStream => {
+            this.stream = mediaStream;
             const video = document.createElement('video');
             video.srcObject = mediaStream;
             video.onloadedmetadata = function(e) {
                 video.play();
             };
             this.video = video;
+
+            this.dispatchEvent(new Event('ready'));
         })
+    }
+
+    getStream() {
+        return this.stream;
     }
 
     reformatCanvas() {

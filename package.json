@@ -2,12 +2,16 @@
   "name": "obs-mobile-companion",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {},
+  "main": "app/main.js",
+  "scripts": {
+    "debug": "electron ."
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "electron": "^12.0.2",
     "express": "^4.17.1",
+    "obs-websocket-js": "^4.0.2",
     "ws": "^7.4.3"
   }
 }

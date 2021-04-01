@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>OBS Monitor</title>
 
     <script src="./lib/obs-websocket.js"></script>
     <script type="module" src="main.js"></script>
@@ -15,6 +15,7 @@
         body {
             background: #000;
             overflow: hidden;
+            user-select: none;
         }
         obs-preview {
             position: absolute;
@@ -36,6 +37,19 @@
             left: 0;
             z-index: 1000;
             font-family: sans-serif;
+        }
+        audio-stream-meter {
+            font-size: 0.65em;
+            font-weight: bold;
+            color: #b3b3b3;
+            text-transform: uppercase;
+            font-family: sans-serif;
+            display: block;
+            z-index: 10000;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            margin-top: 10px;
         }
     </style>
 </head>

@@ -1,4 +1,5 @@
 // localStorage.debug = 'obs-websocket-js:*';
+const OBSWebSocket = require('obs-websocket-js');
 
 const tickrate = 1000 / 1;
 const lokalStatus = {
@@ -64,11 +65,12 @@ function connectionOpende() {
             lokalStatus.stream = data;
             OBS.emit('status');
         })
-        obs.on('StreamStatus', data => {
-            lokalStatus.streamStatus = data;
-            OBS.emit('status');
-        })
     }
+
+    obs.on('StreamStatus', data => {
+        lokalStatus.streamStatus = data;
+        OBS.emit('status');
+    })
 
     statusInterval = setInterval(reqUpdate, tickrate);
     reqUpdate();
@@ -76,7 +78,7 @@ function connectionOpende() {
 
 const listeners = {};
 
-export default class OBS {
+class OBS {
 
     static getState() {
         return lokalStatus;
@@ -98,4 +100,8 @@ export default class OBS {
         return cancel;
     }
 
+}
+
+module.exports = {
+    OBS
 }
