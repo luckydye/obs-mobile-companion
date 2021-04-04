@@ -1,3 +1,4 @@
+const NodeMediaServer = require('node-media-server');
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const express = require('express');
@@ -14,6 +15,10 @@ wsServer.on('connection', socket => {
         handleSocketMessage(socket, JSON.parse(message));
     });
 });
+
+function handleSocketMessage(socket, message) {
+    
+}
 
 const server = expressServer.listen(PORT);
 
@@ -61,3 +66,22 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
+
+// media server
+ 
+const config = {
+  rtmp: {
+    port: 1935,
+    chunk_size: 30000,
+    gop_cache: true,
+    ping: 5,
+    ping_timeout: 60
+  },
+  http: {
+    port: 8000,
+    allow_origin: '*'
+  }
+};
+ 
+const nms = new NodeMediaServer(config)
+nms.run();
