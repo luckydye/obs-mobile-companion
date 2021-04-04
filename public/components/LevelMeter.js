@@ -80,6 +80,11 @@ export default class AudioStreamMeter extends LitElement {
         this.setSourceStream(stream);
     }
 
+    setAudioSourceFromMediaElement(element) {
+        const source = this.audioContext.createMediaElementSource(element);
+        this.setAudioSourceNode(source);
+    }
+
     setLabel(str) {
         this.name = str;
         this.update();

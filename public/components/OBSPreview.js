@@ -1,50 +1,22 @@
 import { css, html, LitElement } from 'https://cdn.pika.dev/lit-element';
 
-let devices = [];
+async function getMedia(videoElement) {
+    if (flvjs.isSupported()) {
+        // videoElement.controls = true;
+        // videoElement.muted = true;
 
-async function getMedia() {
-    let stream = null;
+        videoElement.oncanplay = () => {
+            videoElement.play();
+        }
 
-    devices = await getMediaDevies();
-    const videoDevice = findDeviceByLabel('OBS');
-    const videoDeviceId = videoDevice.deviceId;
-
-    const audioDevice = findDeviceByLabel('CABLE');
-    const audioDeviceId = audioDevice.deviceId;
-
-    try {
-        stream = await navigator.mediaDevices.getUserMedia({ 
-            video: {
-                deviceId: videoDeviceId,
-                width: 1920,
-                height: 1080
-            },
-            audio: {
-                deviceId: audioDeviceId,
-            },
-         });
-        /* use the stream */
-    } catch (err) {
-        /* handle the error */
+        var flvPlayer = flvjs.createPlayer({
+            type: 'flv',
+            url: 'http://localhost:8000/live/test.flv'
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
     }
-
-    return stream;
-}
-
-async function getMediaDevies() {
-    const devices = [];
-    return navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
-        return navigator.mediaDevices.enumerateDevices().then(d => {
-            for(let device of d) {
-                devices.push(device);
-            }
-            return devices;
-        }).catch(console.error);
-    }).catch(console.error);    
-}
-
-function findDeviceByLabel(label) {
-    return devices.find(dev => dev.label.match(label));
 }
 
 let ticksPerSeconds;
@@ -84,22 +56,14 @@ class OBSPreview extends LitElement {
             this.lastTick = currtick;
         }
         loop();
-
-        getMedia().then(mediaStream => {
-            this.stream = mediaStream;
-            const video = document.createElement('video');
-            video.srcObject = mediaStream;
-            video.onloadedmetadata = function(e) {
-                video.play();
-            };
-            this.video = video;
-
-            this.dispatchEvent(new Event('ready'));
-        })
     }
 
     getStream() {
         return this.stream;
+    }
+
+    getVideo() {
+        return this.video;
     }
 
     reformatCanvas() {
@@ -110,6 +74,12 @@ class OBSPreview extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.reformatCanvas();
+
+        this.video = document.createElement('video');
+        getMedia(this.video).then(_ => {
+            this.dispatchEvent(new Event('ready'));
+            this.ready = true;
+        })
     }
 
     get preivewFps() {
@@ -180,8 +150,8 @@ class OBSPreview extends LitElement {
 
     render() {
         return html`
-                ${this.canvas}
-            `;
+            ${this.canvas}
+        `;
     }
 
 }

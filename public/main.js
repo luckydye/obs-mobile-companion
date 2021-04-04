@@ -12,11 +12,16 @@ function init() {
     const meter = new AudioStreamMeter(audioContext, "Master Out");
     document.querySelector('obs-scene-statusbar').append(meter);
 
+    const complete = e => {
+        const video = preview.getVideo();
+        meter.setAudioSourceFromMediaElement(video);
+        // meter.setLabel(`Master Out (${video.getAudioTracks()[0].label})`);
+    }
+
     const preview = document.querySelector('obs-preview');
-    preview.addEventListener('ready', e => {
-        const stream = preview.getStream();
-        console.log(stream);
-        meter.setSourceStream(stream);
-        meter.setLabel(`Master Out (${stream.getAudioTracks()[0].label})`);
-    })
+    if(preview.ready) {
+        complete();
+    } else {
+        preview.addEventListener('ready', complete)
+    }
 }
