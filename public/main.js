@@ -5,6 +5,7 @@ import './components/OBSSceneStatusbar.js';
 import './components/MonitorToolbar.js';
 import './components/SceneSelect.js';
 import './components/SceneTransition.js';
+import './components/ChatWindow.js';
 
 window.addEventListener('DOMContentLoaded', init);
 

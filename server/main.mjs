@@ -2,6 +2,7 @@ import express from 'express';
 import { Server as IoServer } from "socket.io";
 import path from 'path';
 import VideoFeed from './VideoFeed.mjs';
+import Chat from './Chat.mjs';
 import http from 'http';
 
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,12 @@ async function main() {
     feed.stdout.on('data', data => {
         io.emit('videofeed', data);
     })
+
+    // chat
+    // const chat = new Chat();
+    // chat.on('message', msg => {
+    //     console.log(msg);
+    // })
 }
 
 main();

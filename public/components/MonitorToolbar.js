@@ -9,11 +9,8 @@ export default class MonitorToolbar extends LitElement {
             return css`
                 :host {
                     display: flex;
-                    position: fixed;
-                    top: 0;
                     height: 100%;
                     align-items: center;
-                    right: 20px;
                     z-index: 10000;
                     color: #eee;
                     padding: 50px 0;
@@ -78,6 +75,19 @@ export default class MonitorToolbar extends LitElement {
 
                     clip-path: circle(120.0% at 100% 50%);
                     -webkit-clip-path: circle(120.0% at 100% 50%);
+                    transform: translate(0, 0);
+                }
+
+                :host([left]) slot {
+                    right: auto;
+                    left: 120%;
+                    clip-path: circle(0.5% at 0 50%);
+                    -webkit-clip-path: circle(0.5% at 0 50%);
+                    transform: translate(-15px, 0);
+                }
+                :host([left][open]) slot {
+                    clip-path: circle(120.0% at 0 50%);
+                    -webkit-clip-path: circle(120.0% at 0 50%);
                     transform: translate(0, 0);
                 }
             `;

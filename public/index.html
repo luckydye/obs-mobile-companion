@@ -95,6 +95,25 @@
             right: 0;
         }
 
+        monitor-toolbar[left] > * {
+            position: absolute;
+            left: 0;
+            right: auto;
+        }
+
+        monitor-toolbar {
+            position: fixed;
+            top: 0;
+            right: 20px;
+        }
+
+        monitor-toolbar[left] {
+            position: fixed;
+            top: 0;
+            left: 20px;
+            right: auto;
+        }
+
     </style>
 
     <script>
@@ -113,6 +132,9 @@
             <obs-scene-selector icon="videocam"></obs-scene-selector>
             <obs-scene-transition icon="switch_video"></obs-scene-transition>
         </monitor-toolbar>
+        <!-- <monitor-toolbar left>
+            <chat-window icon="chat"></chat-window>
+        </monitor-toolbar> -->
     </main>
 </body>
 
