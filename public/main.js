@@ -14,7 +14,7 @@ function init() {
 
     const complete = e => {
         const video = preview.getVideo();
-        meter.setAudioSourceFromMediaElement(video);
+        // meter.setAudioSourceFromMediaElement(video);
         // meter.setLabel(`Master Out (${video.getAudioTracks()[0].label})`);
     }
 

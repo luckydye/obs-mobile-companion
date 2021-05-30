@@ -135,9 +135,9 @@ class OBSOutputStatusbar extends LitElement {
                         <div class="cell">
                             <span class="label">Encoder</span>
                             <span class="material-icons">developer_board</span>
-                            <span>${stats['cpu-usage'].toFixed(2).padStart(2, "0")}%</span>
+                            <span>${(stats['cpu-usage'] || 0).toFixed(2).padStart(2, "0")}%</span>
                             <span class="material-icons">memory</span>
-                            <span>${stats['memory-usage'].toFixed(0)}MB</span>
+                            <span>${(stats['memory-usage'] || 0).toFixed(0)}MB</span>
                         </div>
                         <div class="row">
                             <div class="cell">

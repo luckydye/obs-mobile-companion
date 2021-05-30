@@ -1,22 +1,36 @@
 import { css, html, LitElement } from 'https://cdn.pika.dev/lit-element';
 
-async function getMedia(videoElement) {
-    if (flvjs.isSupported()) {
-        // videoElement.controls = true;
-        // videoElement.muted = true;
+function getMedia() {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext("2d");
 
-        videoElement.oncanplay = () => {
-            videoElement.play();
+    canvas.width = 1920;
+    canvas.height = 1080;
+
+    let fps = 0;
+    let lastFrame = 0;
+
+    const socket = io(location.href);
+    socket.on('videofeed', data => {
+        const blob = new Blob([data], { type: 'image/jpg' });
+        const url = URL.createObjectURL(blob);
+
+        fps = 1000 / (Date.now() - lastFrame);
+        lastFrame = Date.now();
+
+        const img = new Image();
+        img.onload = () => {
+            const ar = img.width / img.height;
+
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
+            context.fillStyle = '#eee';
+            context.font = '42px Monospace';
+            context.fillText(Math.round(fps) + 'fps', 40, 80);
         }
+        img.src = url;
+    })
 
-        var flvPlayer = flvjs.createPlayer({
-            type: 'flv',
-            url: 'http://localhost:8000/live/test.flv'
-        });
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        flvPlayer.play();
-    }
+    return canvas;
 }
 
 let ticksPerSeconds;
@@ -75,11 +89,10 @@ class OBSPreview extends LitElement {
         super.connectedCallback();
         this.reformatCanvas();
 
-        this.video = document.createElement('video');
-        getMedia(this.video).then(_ => {
-            this.dispatchEvent(new Event('ready'));
-            this.ready = true;
-        })
+        this.video = getMedia();
+        
+        this.dispatchEvent(new Event('ready'));
+        this.ready = true;
     }
 
     get preivewFps() {
@@ -131,8 +144,8 @@ class OBSPreview extends LitElement {
             this.context.drawImage(
                 this.video, 
                 0, 0,
-                this.video.videoWidth, 
-                this.video.videoHeight,
+                this.video.width, 
+                this.video.height,
                 borderPaddingX + cx,
                 borderPaddingY + cy,
                 w - (borderPaddingX * 2),

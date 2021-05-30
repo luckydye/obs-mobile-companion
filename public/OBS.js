@@ -6,7 +6,7 @@ const lokalStatus = {
 }
 
 const obs = new OBSWebSocket();
-obs.connect({ address: 'localhost:4444' });
+obs.connect({ address: location.hostname + ':4444' });
 
 obs.on('ConnectionClosed', connectionClosed);
 obs.on('ConnectionOpened', connectionOpende);
