@@ -129,13 +129,7 @@ class OBSOutputStatusbar extends LitElement {
                             <span>${video['outputHeight']}p</span>
                             <span>${stats['fps'].toFixed(2).padStart(2, '0')}</span>
                         </div>
-                        <div class="cell">
-                            <span class="label">Color</span>
-                            <span class="spacer"></span>
-                            <span>${format}</span>
-                            <span class="spacer"></span>
-                            <span>${colorSpace}</span>
-                        </div>
+                        
                         <div class="cell">
                             <span class="label">Encoder</span>
                             <span class="material-icons">developer_board</span>
