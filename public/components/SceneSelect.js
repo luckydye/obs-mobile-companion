@@ -15,7 +15,7 @@ export default class SceeneSelect extends List {
             this.update();
 
             OBS.on('scenes', e => {
-                this.scenes = OBS.getState().scenes;
+                this.scenes = OBS.getState().scenes || [];
                 this.update();
             });
         }

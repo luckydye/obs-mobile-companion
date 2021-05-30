@@ -1,6 +1,40 @@
 import { css, html, LitElement } from 'https://cdn.pika.dev/lit-element';
 
-function getMedia() {
+async function createRTCAnswer(remoteOffer, callback) {
+    return new Promise((resolve, reject) => {
+        const rc = new RTCPeerConnection();
+        let lastIce = null;
+        rc.onicecandidate = e => {
+            if(lastIce == rc.localDescription) {
+                resolve(rc);
+            }
+            lastIce = rc.localDescription;
+        }
+        rc.ondatachannel = e => {
+            rc.dc = e.channel;
+            rc.dc.onmessage = e => {
+                console.log('Remote msg:', e.data);
+            }
+            rc.dc.onopen = e => {
+                console.log('Data Channel open');
+            }
+        }
+        rc.onaddstream = e => {
+            console.log('Stream', e.stream);
+            callback(e.stream);
+        }
+        rc.setRemoteDescription(remoteOffer).then(e => {
+            console.log('Offset accetped.');
+        });
+        rc.createAnswer().then(anser => {
+            rc.setLocalDescription(anser).then(e => {
+                console.log('Anser created.');
+            })
+        })
+    })
+}
+
+function getMedia(callback) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext("2d");
 
@@ -11,24 +45,42 @@ function getMedia() {
     let lastFrame = 0;
 
     const socket = io(location.host);
-    socket.on('videofeed', data => {
-        const blob = new Blob([data], { type: 'image/jpg' });
-        const url = URL.createObjectURL(blob);
 
-        fps = 1000 / (Date.now() - lastFrame);
-        lastFrame = Date.now();
+    socket.send('requestPreview');
 
-        const img = new Image();
-        img.onload = () => {
-            const ar = img.width / img.height;
-
-            context.drawImage(img, 0, 0, canvas.width, canvas.height);
-            // context.fillStyle = '#eee';
-            // context.font = '42px Monospace';
-            // context.fillText(Math.round(fps) + 'fps', 40, 80);
+    socket.on('message', async (type, data) => {
+        switch(type) {
+            case 'previewOffer':
+                const description = data.description;
+                const answer = await createRTCAnswer(description, stream => {
+                    handleRemoteStream(stream);
+                });
+                const answerData = {
+                    id: data.id,
+                    description: answer.localDescription
+                }
+                socket.send('answer', answerData);
+                break;
         }
-        img.src = url;
     })
+
+    function handleRemoteStream(stream) {
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.muted = true;
+
+        video.oncanplay = () => {
+            video.play();
+        }
+
+        callback(stream, video);
+
+        const draw = () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            requestAnimationFrame(draw);
+        }
+        draw();
+    }
 
     return canvas;
 }
@@ -89,9 +141,12 @@ class OBSPreview extends LitElement {
         super.connectedCallback();
         this.reformatCanvas();
 
-        this.video = getMedia();
+        this.video = getMedia((stream, video) => {
+            this.stream = stream;
+            this.videoSource = video;
+            this.dispatchEvent(new Event('stream'));
+        });
         
-        this.dispatchEvent(new Event('ready'));
         this.ready = true;
     }
 

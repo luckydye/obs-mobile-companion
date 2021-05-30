@@ -16,18 +16,16 @@ function init() {
     const meter = new AudioStreamMeter(audioContext, "Master Out");
     document.querySelector('obs-scene-statusbar').append(meter);
 
-    const complete = e => {
-        const video = preview.getVideo();
-        // meter.setAudioSourceFromMediaElement(video);
-        // meter.setLabel(`Master Out (${video.getAudioTracks()[0].label})`);
-    }
+    window.addEventListener('click', e => {
+        audioContext.resume();
+    });
 
     const preview = document.querySelector('obs-preview');
-    if(preview.ready) {
-        complete();
-    } else {
-        preview.addEventListener('ready', complete)
-    }
+
+    preview.addEventListener('stream', e => {
+        meter.setSourceStream(preview.stream);
+        meter.setLabel(`Master Out`);
+    })
 }
 
 if ('serviceWorker' in navigator) {
