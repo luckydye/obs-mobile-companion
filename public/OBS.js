@@ -1,6 +1,6 @@
 // localStorage.debug = 'obs-websocket-js:*';
 
-const tickrate = 1000 / 1;
+const tickrate = 1000 / 12;
 const lokalStatus = {
     currentScene: ""
 }
@@ -40,29 +40,48 @@ function connectionOpende() {
 
     obs.send('GetCurrentScene').then(data => {
         lokalStatus.currentScene = data.name;
-        OBS.emit('status');
+        OBS.emit('scenes');
     })
 
     const reqUpdate = () => {
-        obs.send('ListOutputs').then(data => {
-            for(let output of data.outputs) {
-                if(output.name == "VirtualOutput") {
-                    lokalStatus.output = output;
+        // scenes
+        obs.send('GetSceneList').then(data => {
+            lokalStatus.scenes = data.scenes;
+            OBS.emit('scenes');
+        }),
+        
+        // status
+        Promise.all([
+            obs.send('ListOutputs').then(data => {
+                for(let output of data.outputs) {
+                    if(output.name == "VirtualOutput") {
+                        lokalStatus.output = output;
+                    }
                 }
-            }
+            }),
+            obs.send('GetStats').then(data => {
+                lokalStatus.stats = data.stats;
+            }),
+            obs.send('GetVideoInfo').then(data => {
+                lokalStatus.video = data;
+            }),
+            obs.send('GetStreamingStatus').then(data => {
+                lokalStatus.stream = data;
+            })
+        ]).finally(() => {
             OBS.emit('status');
         })
-        obs.send('GetStats').then(data => {
-            lokalStatus.stats = data.stats;
-            OBS.emit('status');
-        })
-        obs.send('GetVideoInfo').then(data => {
-            lokalStatus.video = data;
-            OBS.emit('status');
-        })
-        obs.send('GetStreamingStatus').then(data => {
-            lokalStatus.stream = data;
-            OBS.emit('status');
+
+        // transitions
+        Promise.all([
+            obs.send('GetTransitionList').then(data => {
+                lokalStatus.transitions = data.transitions;
+            }),
+            obs.send('GetCurrentTransition').then(data => {
+                lokalStatus.currentTransitions = data;
+            })
+        ]).finally(() => {
+            OBS.emit('transitions');
         })
     }
 
@@ -88,6 +107,30 @@ export default class OBS {
         for(let callback of listeners[event]) {
             callback();
         }
+    }
+
+    static setCurrentScene(scaneName) {
+        return obs.send('SetCurrentScene', {
+            'scene-name': scaneName
+        });
+    }
+    
+    static setCurrentTransition(transitionName) {
+        return obs.send('SetCurrentTransition', {
+            'transition-name': transitionName
+        });
+    }
+    
+    static setTransitionDuration(ms) {
+        return obs.send('SetTransitionDuration', {
+            'duration': ms
+        });
+    }
+
+    static setTransition(scaneName) {
+        return obs.send('SetCurrentScene', {
+            'scene-name': scaneName
+        });
     }
 
     static on(event, callback) {

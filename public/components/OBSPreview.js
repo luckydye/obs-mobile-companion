@@ -10,7 +10,7 @@ function getMedia() {
     let fps = 0;
     let lastFrame = 0;
 
-    const socket = io(location.href);
+    const socket = io(location.host);
     socket.on('videofeed', data => {
         const blob = new Blob([data], { type: 'image/jpg' });
         const url = URL.createObjectURL(blob);

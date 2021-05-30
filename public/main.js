@@ -2,6 +2,9 @@ import AudioStreamMeter from './components/LevelMeter.js';
 import './components/OBSOutputStatusbar.js';
 import './components/OBSPreview.js';
 import './components/OBSSceneStatusbar.js';
+import './components/MonitorToolbar.js';
+import './components/SceneSelect.js';
+import './components/SceneTransition.js';
 
 window.addEventListener('DOMContentLoaded', init);
 

@@ -82,19 +82,17 @@
             z-index: 10000;
         }
 
-        monitor-toolbar:not([open]) [hidden] {
-            transition: visibility 0s linear .3s;
-        }
-
-        monitor-toolbar [hidden] {
+        [hidden] {
             visibility: hidden;
+            position: absolute;
         }
 
         monitor-toolbar > * {
-            position: absolute;
-            right: 0;
+            box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.25);
         }
-
+        monitor-toolbar {
+            box-shadow: 1px 2px 18px rgba(0, 0, 0, 0.25);
+        }
     </style>
 
     <script>
@@ -109,10 +107,6 @@
         <obs-output-statusbar></obs-output-statusbar>
         <obs-preview></obs-preview>
         <obs-scene-statusbar></obs-scene-statusbar>
-        <monitor-toolbar>
-            <obs-scene-selector icon="videocam"></obs-scene-selector>
-            <obs-scene-transition icon="switch_video"></obs-scene-transition>
-        </monitor-toolbar>
     </main>
 </body>
 

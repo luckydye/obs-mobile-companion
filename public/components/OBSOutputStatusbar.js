@@ -9,7 +9,7 @@ class OBSOutputStatusbar extends LitElement {
                     display: block;
                     width: 100%;
                     padding: 15px 0;
-                    background: rgba(0, 0, 0, 0.75);
+                    background: rgba(0, 0, 0, 0.25);
                     color: rgb(238, 238, 238);
                     font-size: 1em;
                     box-sizing: border-box;
@@ -61,6 +61,10 @@ class OBSOutputStatusbar extends LitElement {
                 }
                 .spacer {
                     margin: 0 4px;
+                }
+                .cpu {
+                    min-width: 60px;
+                    text-align: center;
                 }
             `;
         }
@@ -135,7 +139,7 @@ class OBSOutputStatusbar extends LitElement {
                         <div class="cell">
                             <span class="label">Encoder</span>
                             <span class="material-icons">developer_board</span>
-                            <span>${(stats['cpu-usage'] || 0).toFixed(2).padStart(2, "0")}%</span>
+                            <span class="cpu">${(stats['cpu-usage'] || 0).toFixed(2).padStart(2, "0")}%</span>
                             <span class="material-icons">memory</span>
                             <span>${(stats['memory-usage'] || 0).toFixed(0)}MB</span>
                         </div>
