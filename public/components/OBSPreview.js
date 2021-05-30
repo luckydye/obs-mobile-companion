@@ -23,9 +23,9 @@ function getMedia() {
             const ar = img.width / img.height;
 
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
-            context.fillStyle = '#eee';
-            context.font = '42px Monospace';
-            context.fillText(Math.round(fps) + 'fps', 40, 80);
+            // context.fillStyle = '#eee';
+            // context.font = '42px Monospace';
+            // context.fillText(Math.round(fps) + 'fps', 40, 80);
         }
         img.src = url;
     })
