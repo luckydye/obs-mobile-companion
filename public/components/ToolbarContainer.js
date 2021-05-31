@@ -20,7 +20,7 @@ export default class ToolbarContainer extends LitElement {
                     padding: 4px;
                     border-radius: 10px;
                     background: rgba(42, 42, 42, 0.75);
-                    backdrop-filter: blur(8px);
+                    backdrop-filter: blur(12px);
                     font-family: Lato, sans-serif;
                     box-shadow: rgb(0 0 0 / 25%) 1px 2px 18px;
                     max-height: 100%;

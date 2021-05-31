@@ -18,7 +18,7 @@ export default class MonitorToolbar extends LitElement {
                 }
                 .tabs {
                     padding: 2px;
-                    border-radius: 10px;
+                    border-radius: 16px;
                     background: rgb(0 0 0 / 75%);
                     backdrop-filter: blur(8px);
                     display: grid;
@@ -30,7 +30,7 @@ export default class MonitorToolbar extends LitElement {
                 .tab {
                     position: relative;
                     background: #eeeeee2e;
-                    border-radius: 8px;
+                    border-radius: 12px;
                     width: 60px;
                     height: 60px;
                     padding: 10px;

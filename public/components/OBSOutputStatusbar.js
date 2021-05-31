@@ -8,10 +8,10 @@ class OBSOutputStatusbar extends LitElement {
                 :host {
                     display: block;
                     width: 100%;
-                    padding: 15px 0;
+                    padding: 10px 0;
                     background: rgba(0, 0, 0, 0.25);
                     color: rgb(238, 238, 238);
-                    font-size: 1em;
+                    font-size: 0.8em;
                     box-sizing: border-box;
                 }
                 .container {

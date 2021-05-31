@@ -8,7 +8,7 @@ class OBSSceneStatusbar extends LitElement {
                 :host {
                     display: block;
                     width: 100%;
-                    padding: 15px 0;
+                    padding: 10px 0;
                     background: rgba(0, 0, 0, 0.25);
                     color: rgb(238, 238, 238);
                     font-size: 1em;
@@ -87,9 +87,10 @@ class OBSSceneStatusbar extends LitElement {
                             <span class="label">Scene</span>
                             <span>${this.state.currentScene}</span>
                         </div>
+                        <div class="cell">
+                            <slot></slot>
+                        </div>
                     </div>
-
-                    <slot></slot>
                 `;
             } else {
                 return html`
@@ -99,8 +100,9 @@ class OBSSceneStatusbar extends LitElement {
                         <div class="cell">
                             <span class="label">Scene</span>
                         </div>
-
-                        <slot></slot>
+                        <div class="cell">
+                            <slot></slot>
+                        </div>
                     </div>
                 `;
             }

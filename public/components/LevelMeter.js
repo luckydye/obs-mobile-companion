@@ -144,12 +144,12 @@ export default class AudioStreamMeter extends LitElement {
                     display: block;
                 }
                 .name {
-                    margin-bottom: 10px;
+                    margin-bottom: 5px;
                 }
                 canvas {
                     image-rendering: pixelated;
                     width: 100%;
-                    height: 4px;
+                    height: 3px;
                     display: block;
                     margin-bottom: 1px;
                     background: rgba(0, 0, 0, 0.25);
