@@ -49,6 +49,11 @@ function connectionOpende() {
             lokalStatus.scenes = data.scenes;
             OBS.emit('scenes');
         }),
+
+        obs.send('GetSourcesList').then(data => {
+            lokalStatus.sources = data.sources;
+            OBS.emit('sources');
+        }),
         
         // status
         Promise.all([

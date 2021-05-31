@@ -7,15 +7,14 @@ export default class SourcesList extends List {
         constructor() {
             super();
 
-            this.scenes = [];
-            this.currentScene = null;
+            this.sources = [];
         }
 
         connectedCallback() {
             this.update();
 
-            OBS.on('scenes', e => {
-                this.scenes = OBS.getState().scenes || [];
+            OBS.on('sources', e => {
+                this.sources = OBS.getState().sources || [];
                 this.update();
             });
         }
@@ -25,17 +24,13 @@ export default class SourcesList extends List {
         }
         
         render() {
-            const currentScene = OBS.getState().currentScene;
-
             return html`
                 <div class="container">
-                    <div class="title">Scene Switcher</div>
+                    <div class="title">Sources</div>
                     <div class="list">
-                        ${this.scenes.map(scene => {
+                        ${this.sources.map(source => {
                             return html`
-                                <div class="list-item" 
-                                    ?active="${scene.name === currentScene}"
-                                    @click="${e => this.setCurrentScene(scene.name)}">${scene.name}</div>
+                                <div class="list-item">${source.name}</div>
                             `;
                         })}
                     </div>
