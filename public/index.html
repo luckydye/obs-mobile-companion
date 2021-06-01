@@ -115,6 +115,37 @@
             right: auto;
         }
 
+        .big-button {
+            width: auto;
+            height: auto;
+            padding: 8px;
+            border-radius: 6px;
+            border: none;
+            color: #eee;
+        }
+        .big-button[checked] {
+            background: #1c1c1c;
+        }
+        .big-button:hover {
+            background: #272727;
+        }
+        .big-button:active {
+            background: rgb(50, 50, 50);
+        }
+        .big-button::after {
+            content: "fullscreen";
+        }
+        .big-button[checked]::after {
+            content: "close_fullscreen";
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000000;
+        }
+
     </style>
 
     <script>
@@ -137,7 +168,21 @@
             <obs-scene-selector icon="videocam"></obs-scene-selector>
             <obs-scene-transition icon="switch_video"></obs-scene-transition>
         </monitor-toolbar>
+
+        <div class="big-button fullscreen-btn material-icons"></div>
     </main>
+
+    <script>
+        const fullBtn = document.querySelector('.fullscreen-btn');
+        const main = document.querySelector('main');
+        fullBtn.addEventListener('click', e => {
+            if(!document.fullscreenElement) {
+                main.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        })
+    </script>
 </body>
 
 </html>

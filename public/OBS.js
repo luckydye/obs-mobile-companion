@@ -5,6 +5,8 @@ const lokalStatus = {
     currentScene: ""
 }
 
+window.lokalStatus = lokalStatus;
+
 const obs = new OBSWebSocket();
 obs.connect({ address: location.hostname + ':4444' });
 
@@ -38,11 +40,9 @@ let statusInterval;
 async function connectionOpende() {
     log('Connection opened');
 
-    obs.send('GetCurrentScene').then(data => {
+    await obs.send('GetCurrentScene').then(data => {
         lokalStatus.currentScene = data.name;
-        OBS.emit('scenes');
     })
-
     await obs.send('GetSourceTypesList').then(data => {
         lokalStatus.types = data.types;
     });
@@ -55,8 +55,6 @@ async function connectionOpende() {
         }),
 
         obs.send('GetSourcesList').then(async data => {
-            lokalStatus.sources = data.sources;
-
             for(let source of data.sources) {
                 const typesId = source.typeId;
                 let hasAudio = false;
@@ -80,19 +78,16 @@ async function connectionOpende() {
                     sourceName: name,
                 }).then(data => data.monitorType);
 
-                const settings = await obs.send('GetSourceSettings', {
-                    sourceName: name,
-                }).then(data => data.sourceSettings);
-
-                source.settings = settings;
                 source.monitorType = monitorType;
                 source.volume = volume;
                 source.muted = muted;
                 source.hasAudio = hasAudio;
                 source.hasVideo = hasVideo;
             }
+            lokalStatus.sources = data.sources;
 
             OBS.emit('sources');
+            OBS.emit('audiomixer');
         }),
         
         // status

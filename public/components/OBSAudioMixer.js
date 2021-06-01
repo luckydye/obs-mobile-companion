@@ -7,21 +7,14 @@ export default class AudioMixer extends List {
 
     constructor() {
         super();
-
-        this.sources = [];
     }
 
     connectedCallback() {
         this.update();
 
-        OBS.on('sources', e => {
-            this.sources = OBS.getState().sources || [];
+        OBS.on('audiomixer', e => {
             this.update();
         });
-    }
-
-    setCurrentScene(scneName) {
-        OBS.setCurrentScene(scneName);
     }
 
     static get styles() {
@@ -108,13 +101,14 @@ export default class AudioMixer extends List {
     }
 
     render() {
+        const sources = OBS.getState().sources || [];
         return html`
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
             <div class="container">
                 <div class="title">Audio Mixer</div>
                 <div class="list">
-                    ${this.sources.map(source => {
+                    ${sources.reverse().map(source => {
                         if(!source.hasAudio) {
                             return;
                         }
