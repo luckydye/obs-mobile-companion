@@ -11,6 +11,25 @@ import './components/OBSAudioMixer.js';
 
 window.addEventListener('DOMContentLoaded', init);
 
+let resetTime = null;
+function showTools() {
+    clearTimeout(resetTime);
+
+    document.body.removeAttribute('minmal');
+
+    resetTime = setTimeout(() => {
+        if(document.querySelectorAll('monitor-toolbar[open]').length > 0) {
+            showTools(); 
+        } else {
+            hideTools();
+        }
+    }, 3000);
+}
+
+function hideTools() {
+    document.body.setAttribute('minmal', '');
+}
+
 function init() {
     document.main = document.querySelector("main");
 
@@ -20,7 +39,10 @@ function init() {
 
     window.addEventListener('click', e => {
         audioContext.resume();
+        showTools();
     });
+
+    showTools();
 
     const preview = document.querySelector('obs-preview');
 

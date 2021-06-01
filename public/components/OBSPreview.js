@@ -1,5 +1,13 @@
 import { css, html, LitElement } from 'https://cdn.pika.dev/lit-element';
 
+const audioBandwidth = 128;
+const videoBandwidth = 1048;
+function setBandwidth(sdp) {
+    sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
+    sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
+    return sdp;
+}
+
 async function createRTCAnswer(remoteOffer, callback) {
     return new Promise((resolve, reject) => {
         const rc = new RTCPeerConnection();
@@ -8,6 +16,8 @@ async function createRTCAnswer(remoteOffer, callback) {
             if(lastIce == rc.localDescription) {
                 resolve(rc);
             }
+            
+            rc.localDescription.sdp = setBandwidth(rc.localDescription.sdp);
             lastIce = rc.localDescription;
         }
         rc.ondatachannel = e => {

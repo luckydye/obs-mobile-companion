@@ -61,21 +61,17 @@ export default class MonitorToolbar extends LitElement {
                     right: 120%;
                     top: 0px;
                     transition: clip-path 0.125s cubic-bezier(0.42, 0, 0.06, 0.98) 0s, 
-                                -webkit-clip-path 0.125s cubic-bezier(0.42, 0, 0.06, 0.98) 0s,
-                                transform .1s ease-out;
+                                -webkit-clip-path 0.125s cubic-bezier(0.42, 0, 0.06, 0.98) 0s;
 
                     clip-path: circle(0.0% at 100% 51%);
                     -webkit-clip-path: circle(0.0% at 100% 51%);
-                    transform: translate(15px, 0);
                 }
                 :host([open]) slot {
-                    transition: clip-path 0.25s cubic-bezier(0.42, 0, 0.06, 0.98) 0s, 
-                                -webkit-clip-path 0.25s cubic-bezier(0.42, 0, 0.06, 0.98) 0s,
-                                transform .125s ease-out;
+                    transition: clip-path 0.4s cubic-bezier(0.42, 0, 0.06, 0.98) 0s, 
+                                -webkit-clip-path 0.4s cubic-bezier(0.42, 0, 0.06, 0.98) 0s;
 
                     clip-path: circle(200.0% at 100% 50%);
                     -webkit-clip-path: circle(200.0% at 100% 50%);
-                    transform: translate(0, 0);
                 }
 
                 :host([left]) slot {
@@ -83,12 +79,10 @@ export default class MonitorToolbar extends LitElement {
                     left: 120%;
                     clip-path: circle(0.5% at 0 50%);
                     -webkit-clip-path: circle(0.5% at 0 50%);
-                    transform: translate(-15px, 0);
                 }
                 :host([left][open]) slot {
                     clip-path: circle(200.0% at 0 50%);
                     -webkit-clip-path: circle(200.0% at 0 50%);
-                    transform: translate(0, 0);
                 }
             `;
         }

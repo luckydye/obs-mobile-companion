@@ -106,6 +106,7 @@
             position: fixed;
             top: 0;
             right: 20px;
+            transition: transform .25s ease;
         }
 
         monitor-toolbar[left] {
@@ -113,6 +114,13 @@
             top: 0;
             left: 20px;
             right: auto;
+        }
+
+        [minmal] monitor-toolbar {
+            transform: translate(150%, 0);
+        }
+        [minmal] monitor-toolbar[left] {
+            transform: translate(-150%, 0);
         }
 
         .big-button {
@@ -123,20 +131,11 @@
             border: none;
             color: #eee;
         }
-        .big-button[checked] {
-            background: #1c1c1c;
-        }
         .big-button:hover {
             background: #272727;
         }
         .big-button:active {
             background: rgb(50, 50, 50);
-        }
-        .big-button::after {
-            content: "fullscreen";
-        }
-        .big-button[checked]::after {
-            content: "close_fullscreen";
         }
 
         .fullscreen-btn {
@@ -144,6 +143,12 @@
             bottom: 20px;
             right: 20px;
             z-index: 1000000;
+        }
+        .fullscreen-btn::after {
+            content: "fullscreen";
+        }
+        .fullscreen-btn[checked]::after {
+            content: "close_fullscreen";
         }
 
     </style>
@@ -169,7 +174,7 @@
             <obs-scene-transition icon="switch_video"></obs-scene-transition>
         </monitor-toolbar>
 
-        <div class="big-button fullscreen-btn material-icons"></div>
+        <toggle-button class="big-button fullscreen-btn material-icons"></toggle-button>
     </main>
 
     <script>

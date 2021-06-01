@@ -41,6 +41,14 @@ async function getDeviceStream(deviceId) {
 
 let lastOffer = null;
 
+const audioBandwidth = 128;
+const videoBandwidth = 1048;
+function setBandwidth(sdp) {
+    sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + audioBandwidth + '\r\n');
+    sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + videoBandwidth + '\r\n');
+    return sdp;
+}
+
 async function createRTCOffer(stream) {
     return new Promise((resolve, reject) => {
         const lc = new RTCPeerConnection();
@@ -66,6 +74,8 @@ async function createRTCOffer(stream) {
             if(lc.localDescription == lastIce) {
                 resolve(lc);
             }
+            lc.localDescription.sdp = setBandwidth(lc.localDescription.sdp);
+            lc.localDescription.sdp.replace("maxaveragebitrate=510000");
             lastIce = lc.localDescription;
         }
 
