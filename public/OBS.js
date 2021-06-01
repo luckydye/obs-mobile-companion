@@ -35,13 +35,17 @@ function connectionClosed() {
 
 let statusInterval;
 
-function connectionOpende() {
+async function connectionOpende() {
     log('Connection opened');
 
     obs.send('GetCurrentScene').then(data => {
         lokalStatus.currentScene = data.name;
         OBS.emit('scenes');
     })
+
+    await obs.send('GetSourceTypesList').then(data => {
+        lokalStatus.types = data.types;
+    });
 
     const reqUpdate = () => {
         // scenes
@@ -50,8 +54,44 @@ function connectionOpende() {
             OBS.emit('scenes');
         }),
 
-        obs.send('GetSourcesList').then(data => {
+        obs.send('GetSourcesList').then(async data => {
             lokalStatus.sources = data.sources;
+
+            for(let source of data.sources) {
+                const typesId = source.typeId;
+                let hasAudio = false;
+                let hasVideo = false;
+
+                for(let type of lokalStatus.types) {
+                    if(type.typeId == typesId) {
+                        hasAudio = type.caps.hasAudio;
+                        hasVideo = type.caps.hasVideo;
+                    }
+                }
+
+                const name = source.name;
+                const volume = await obs.send('GetVolume', {
+                    source: name,
+                }).then(data => data.volume);
+                const muted = await obs.send('GetMute', {
+                    source: name,
+                }).then(data => data.muted);
+                const monitorType = await obs.send('GetAudioMonitorType', {
+                    sourceName: name,
+                }).then(data => data.monitorType);
+
+                const settings = await obs.send('GetSourceSettings', {
+                    sourceName: name,
+                }).then(data => data.sourceSettings);
+
+                source.settings = settings;
+                source.monitorType = monitorType;
+                source.volume = volume;
+                source.muted = muted;
+                source.hasAudio = hasAudio;
+                source.hasVideo = hasVideo;
+            }
+
             OBS.emit('sources');
         }),
         
@@ -94,6 +134,14 @@ function connectionOpende() {
         lokalStatus.streamStatus = data;
         OBS.emit('status');
     })
+
+    obs.on('SourceVolumeChanged', ({ sourceName, volume }) => {
+        for(let source of lokalStatus.sources) {
+            if(source.name == sourceName) {
+                source.volume = volume;
+            }
+        }
+    })
     
     statusInterval = setInterval(reqUpdate, tickrate);
     reqUpdate();
@@ -135,6 +183,28 @@ export default class OBS {
     static setTransition(scaneName) {
         return obs.send('SetCurrentScene', {
             'scene-name': scaneName
+        });
+    }
+
+    static setVolume(sourceName, volume) {
+        return obs.send('SetVolume', {
+            'source': sourceName,
+            'volume': volume,
+            'useDecibel': false,
+        });
+    }
+
+    static setMute(sourceName, muted) {
+        return obs.send('SetMute', {
+            'source': sourceName,
+            'mute': muted,
+        });
+    }
+
+    static setAudioMonitorType(sourceName, monitorType) {
+        return obs.send('SetAudioMonitorType', {
+            'sourceName': sourceName,
+            'monitorType': monitorType,
         });
     }
 

@@ -7,6 +7,7 @@ import './components/SceneSelect.js';
 import './components/SceneTransition.js';
 import './components/ChatWindow.js';
 import './components/OBSSourcesList.js';
+import './components/OBSAudioMixer.js';
 
 window.addEventListener('DOMContentLoaded', init);
 
