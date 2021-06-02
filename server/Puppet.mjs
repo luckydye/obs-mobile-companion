@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 
 export default async function() {
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         args: [ '--use-fake-ui-for-media-stream' ]
     });
     const page = await browser.newPage();
