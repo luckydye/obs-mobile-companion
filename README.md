@@ -14,6 +14,7 @@
   - etc.
 - Chat
   - EventSub for Polls, Predictions, etc.
+  - (3rd party) emotes render
 - Stream Controls
   - Scene Switch
   - Transitions
